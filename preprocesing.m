@@ -1,6 +1,7 @@
 materijali = {'wood', 'steel', 'ceramic', 'plastic', 'pluto'};
 N = 3;
-
+th = 0.4;
+nPeaks = 20;
 [x_silence, fs] = read_sound("sounds/silence.wav");
 Sxx_silence = pspectrum(x_silence, fs, "power");
 Sxx_silence = Sxx_silence ./ max(Sxx_silence);
@@ -16,8 +17,6 @@ for i = 1:length(materijali)
         Sxx = Sxx .* (1-Sxx_silence);
         Sxx = Sxx ./ max(Sxx);
         % find peaks
-        th = 0.1;
-        nPeaks = 20;
         [test_peaks, test_locs] = findpeaks(Sxx, 'MinPeakHeight', th, 'SortStr','descend', 'NPeaks', nPeaks);
         % save peaks for future use
         save(['peaks/' materijal num2str(j, '%d') '.mat'], 'test_peaks', 'test_locs');

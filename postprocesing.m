@@ -1,6 +1,8 @@
 materijali = {'wood', 'steel', 'ceramic', 'plastic', 'pluto'};
 N = 3;
-odstupanje = 10;
+odstupanje = 7;
+th = 0.4;
+nPeaks = 20;
 
 % resulting matrix
 confusion_matrix = zeros(length(materijali)*N, length(materijali)*N);
@@ -20,8 +22,6 @@ for i = 1:length(materijali)
         Sxx = Sxx .* (1-Sxx_silence);
         Sxx = Sxx ./ max(Sxx);
         % find peaks
-        th = 0.1;
-        nPeaks = 20;
         [peaks, locs] = findpeaks(Sxx, 'MinPeakHeight', th, 'SortStr','descend', 'NPeaks', nPeaks);
         
         % test for likelines against every other measurement
@@ -53,4 +53,20 @@ for i = 1:length(materijali)
         end
     end
 end
+% 1. redak je 1. uzorak testiran na sve ostale uzorke
+figure(1);
 imagesc(confusion_matrix);
+colorbar;
+
+% predviđanje 3 najveca broja u svakom retku
+confustion_matrix_predict = zeros(size(confusion_matrix));
+
+for i = 1:size(confusion_matrix, 1)
+    najveci_brojevi = maxk(confusion_matrix(i, :), 2);
+    % Postavljanje tri najveća broja na 1 u rezultatnoj matrici
+    confustion_matrix_predict(i, :) = ismember(confusion_matrix(i, :), najveci_brojevi);
+end
+
+figure(2);
+imagesc(confustion_matrix_predict);
+colorbar;

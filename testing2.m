@@ -1,4 +1,4 @@
-[x, fs] = read_sound("sounds/steel2.wav");
+[x, fs] = read_sound("sounds/steel1.wav");
 %soundsc(rec, fs);
 
 X = fft(x);
